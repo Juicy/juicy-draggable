@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>juicy-draggable</title>
+    <meta charset="utf-8" />
+    <script src="../webcomponentsjs/webcomponents.js"></script>
+    <link rel="import" href="../polymer/polymer.html" />
+    <link rel="import" href="juicy-draggable.html" />
+    <style>
+        #drag {
+            overflow: visible;
+            padding-left: 420px;
+            min-height: 60px;
+        }
+
+        .drag,
+        .drag-helper {
+            width: 200px;
+            line-height: 50px;
+            float: left;
+            margin: 0px 10px 10px 0px;
+            border: 1px dashed #333333;
+            text-align: center;
+            cursor: move;
+        }
+
+        #drop {
+            clear: both;
+            border: 1px solid #333333;
+            padding: 0px;
+        }
+
+        #drop p {
+            border-bottom: 1px solid #333333;
+            padding: 10px;
+            margin: 0px;
+        }
+
+        #drop div.drop {
+            min-height: 100px;
+            padding: 10px;
+        }
+
+        #drop .drag {
+            cursor: default;
+        }
+
+        .drag-helper {
+            display: none;
+        }
+
+        .drag-helper.dragging {
+            display: block;
+        }
+
+        .drag-hover {
+            background-color: #eeffc5;
+        }
+
+        juicy-draggable.fixed .drag {
+            left: 10px;
+        }
+
+        juicy-draggable.fixed-drop .drag {
+            left: 220px;
+        }
+    </style>
+</head>
+<body>
+    <h3>juicy-draggable</h3>
+    <p>This demo requires Polymer</p>
+    <template is="dom-bind" id="root">
+        <div id="drag">
+            <juicy-draggable position="static" dropselector="#drop div.drop" on-juicy-draggable-stop="itemDropped">
+                <div class="drag">Drag and drop my copy</div>
+            </juicy-draggable>
+            <juicy-draggable class="fixed-drop" dropselector="#drop div.drop" on-juicy-draggable-stop="itemDropped">
+                <div class="drag">Drag and drop me</div>
+            </juicy-draggable>
+            <juicy-draggable class="fixed">
+                <div class="drag">Drag me around</div>
+            </juicy-draggable>
+        </div>
+        <div id="drop">
+            <p>Drop zone</p>
+            <div class="drop"></div>
+        </div>
+    </template>
+    <script>
+        var template = document.querySelector("#root");
+
+        template.itemDropped = function (event) {
+            if (!event.detail.dropElement) {
+                return;
+            }
+
+            var target = event.currentTarget;
+            var drag = event.detail.dragElement;
+            var drop = event.detail.dropElement;
+
+            if (target.position == "static") {
+                var origin = drag.nextElementSibling;
+
+                drop.appendChild(origin);
+                drag.parentNode.removeChild(drag);
+            } else {
+                drop.appendChild(drag);
+                drag.style.position = "";
+                target.setAttribute("disabled", "disabled");
+            }
+        };
+    </script>
+</body>
+</html>

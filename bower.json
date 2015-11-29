@@ -1,0 +1,25 @@
+{
+  "name": "juicy-draggable",
+  "homepage": "https://github.com/Juicy/juicy-draggable",
+  "authors": [
+    "Konstantin <const.miyang@gmail.com>"
+  ],
+  "description": "Custom element to make items draggable and droppable",
+  "main": "juicy-draggable.html",
+  "moduleType": [],
+  "keywords": [
+    "WebComponent",
+    "draggable",
+    "droppable",
+    "juicy"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "../",
+    "test",
+    "tests"
+  ]
+}
