@@ -235,7 +235,8 @@ version: 0.0.0
             return draggable;
         })();
         var JuicyDraggablePrototype = Object.create(HTMLElement.prototype);
-        JuicyDraggablePrototype.disabled = false;
+        //Throws a weird exception in IE;
+        //JuicyDraggablePrototype.disabled = false;
         JuicyDraggablePrototype.element = null;
         JuicyDraggablePrototype.attachedCallback = function () {
             var element = null;
