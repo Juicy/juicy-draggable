@@ -8,7 +8,10 @@ version: 0.0.0
     <content id="content"></content>
 </template>
 <script>
-    (function (scriptDocument) {
+    (function () {
+        var script = document._currentScript || document.currentScript;
+        var scriptDocument = script.ownerDocument;
+
         //https://github.com/gtramontina/draggable.js/blob/master/draggable.js
         var draggable = (function definition() {
             function addEventListener(element, eventName, handler) {
@@ -314,5 +317,5 @@ version: 0.0.0
         window.JuicyDraggableElement = document.registerElement("juicy-draggable", {
             prototype: JuicyDraggablePrototype
         });
-    })(document.currentScript.ownerDocument);
+    })();
 </script>
