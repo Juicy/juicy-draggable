@@ -1,0 +1,19 @@
+{
+    "name": "juicy-draggable",
+    "version": "0.0.0",
+    "description": "<juicy-draggable> is a custom element to make items draggable and droppable",
+    "main": "juicy-draggable.html",
+    "directories": { },
+    "dependencies": { },
+    "devDependencies": {
+        "grunt-bump": "^0.5.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Juicy/juicy-draggable"
+    },
+    "bugs": {
+        "url": "https://github.com/Juicy/juicy-draggable/issues"
+    },
+    "license": "MIT"
+}
