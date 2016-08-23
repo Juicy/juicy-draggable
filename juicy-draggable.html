@@ -104,11 +104,13 @@ version: 0.0.1
                 element.draggableListeners = {
                     start: [],
                     drag: [],
-                    stop: []
+                    stop: [],
+                    highlight: []
                 };
                 element.whenDragStarts = addListener(element, 'start');
                 element.whenDragging = addListener(element, 'drag');
                 element.whenDragStops = addListener(element, 'stop');
+                element.whenDragHighlight = addListener(element, 'highlight');
             }
             function copyElement(from, to) {
                 var rec = from.getBoundingClientRect();
@@ -218,6 +220,7 @@ version: 0.0.1
                     if (x >= rec.left && x <= rec.right && y >= rec.top && y <= rec.bottom) {
                         currentDropElement = item;
                         item.classList.add(currentOptions.dragHoverClass);
+                        triggerEvent('highlight', { x: x, y: y, item: item, mouseEvent: event });
                     } else {
                         item.classList.remove(currentOptions.dragHoverClass);
                     }
@@ -280,6 +283,11 @@ version: 0.0.1
             });
             element.whenDragStops(function (e) {
                 var event = new Event("juicy-draggable-stop");
+                event.detail = e;
+                that.dispatchEvent(event);
+            });
+            element.whenDragHighlight(function (e) {
+                var event = new Event("juicy-draggable-highligh");
                 event.detail = e;
                 that.dispatchEvent(event);
             });
