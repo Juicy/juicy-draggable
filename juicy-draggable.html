@@ -59,9 +59,9 @@ version: 0.0.2
                     if (position == "static") {
                         copyElement(element, dragElement);
                     }
+
                     currentOptions = options;
-                    startDragging(event, dragElement);
-                    started = true;
+                    started = startDragging(event, dragElement);
                 });
                 addEventListener(handle, "mousemove", function (event) {
                     if (isDisabled(element)) {
@@ -131,8 +131,15 @@ version: 0.0.2
                 currentElement.lastXPosition = event.clientX;
                 currentElement.lastYPosition = event.clientY;
                 var okToGoOn = triggerEvent('start', { x: initialPosition.left, y: initialPosition.top, mouseEvent: event });
-                if (!okToGoOn) return;
+
+                if (!okToGoOn) {
+                    currentElement.classList.remove(currentOptions.draggingClass);
+                    return false;
+                };
+
                 addDocumentListeners();
+
+                return true;
             }
             function stopDragging(event) {
                 removeDocumentListeners();
@@ -275,6 +282,7 @@ version: 0.0.2
                 var event = new Event("juicy-draggable-start");
                 event.detail = e;
                 that.dispatchEvent(event);
+                return !(event.cancel === true);
             });
             element.whenDragging(function (e) {
                 var event = new Event("juicy-draggable-move");
