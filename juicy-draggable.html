@@ -4,9 +4,6 @@
 version: 0.0.3
 -->
 
-<template id="juicy-draggable-element">
-    <content id="content"></content>
-</template>
 <script>
     (function () {
         var script = document._currentScript || document.currentScript;
@@ -252,10 +249,14 @@ version: 0.0.3
             var element = null;
             var handle = null;
             var that = this;
-            var root = this.createShadowRoot();
-            var template = scriptDocument.querySelector("#juicy-draggable-element");
-            var clone = document.importNode(template.content, true);
-            root.appendChild(clone);
+            var root;
+            if (this.attachShadow) {
+                root = this.attachShadow({ mode: 'open' });
+                root.innerHTML = '<slot id="content"></slot>';
+            } else {
+                root = this.createShadowRoot();
+                root.innerHTML = '<content id="content"></content>';
+            }
             this.refreshAttributeValues();
             if (!this.elementId) {
                 element = this.children[0];
@@ -302,14 +303,14 @@ version: 0.0.3
         };
         JuicyDraggablePrototype.attributeChangedCallback = function (attributeName) {
             switch (attributeName) {
-                case "disabled":
-                    var value = this.hasAttribute("disabled");
-                    if (value) {
-                        this.element.setAttribute("data-draggable-disabled", "disabled");
-                    } else {
-                        this.element.removeAttribute("data-draggable-disabled");
-                    }
-                    break;
+            case "disabled":
+                var value = this.hasAttribute("disabled");
+                if (value) {
+                    this.element.setAttribute("data-draggable-disabled", "disabled");
+                } else {
+                    this.element.removeAttribute("data-draggable-disabled");
+                }
+                break;
             }
         };
         JuicyDraggablePrototype.getScreenSize = function () {
