@@ -4,8 +4,6 @@
 version: 0.0.3
 -->
 
-<template id="juicy-draggable-element">
-</template>
 <script>
     (function () {
         var script = document._currentScript || document.currentScript;
@@ -259,11 +257,6 @@ version: 0.0.3
                 root = this.createShadowRoot();
                 root.innerHTML = '<content id="content"></content>';
             }
-
-            this.refreshAttributeValues();
-            var template = scriptDocument.querySelector("#juicy-draggable-element");
-            var clone = document.importNode(template.content, true);
-            root.appendChild(clone);
             this.refreshAttributeValues();
             if (!this.elementId) {
                 element = this.children[0];
