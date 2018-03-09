@@ -241,99 +241,112 @@ version: 0.1.0
             }
             return draggable;
         })();
-        var JuicyDraggablePrototype = Object.create(HTMLElement.prototype);
-        //Throws a weird exception in IE;
-        //JuicyDraggablePrototype.disabled = false;
-        JuicyDraggablePrototype.element = null;
-        JuicyDraggablePrototype.attachedCallback = function () {
-            var element = null;
-            var handle = null;
-            var that = this;
-            var root;
-            if (this.attachShadow) {
-                root = this.attachShadow({ mode: 'open' });
-                root.innerHTML = '<slot id="content"></slot>';
-            } else {
-                root = this.createShadowRoot();
-                root.innerHTML = '<content id="content"></content>';
+
+        class JuicyDraggable extends HTMLElement {
+
+            constructor() {
+                super();
+                this.element = null;
             }
-            this.refreshAttributeValues();
-            if (!this.elementId) {
-                element = this.children[0];
-            } else {
-                element = this.querySelector("#" + this.elementId);
+
+            static get observedAttributes() {
+                return ["disabled"]
             }
-            if (this.handleId) {
-                handle = this.querySelector("#" + this.handleId);
+
+            attributeChangedCallback(attributeName) {
+                switch (attributeName) {
+                    case "disabled":
+                        var value = this.hasAttribute("disabled");
+                        if (value) {
+                            this.element.setAttribute("data-draggable-disabled", "disabled");
+                        } else {
+                            this.element.removeAttribute("data-draggable-disabled");
+                        }
+                        break;
+                }
             }
-            this.dragHelperClass = this.dragHelperClass || "drag-helper";
-            this.dragHoverClass = this.dragHoverClass || "drag-hover";
-            this.draggingClass = this.draggingClass || "dragging";
-            this.element = element;
-            element = draggable({
-                element: element,
-                handle: handle,
-                position: this.position,
-                dropSelector: this.dropSelector,
-                dragHelperClass: this.dragHelperClass,
-                dragHoverClass: this.dragHoverClass,
-                draggingClass: this.draggingClass
-            });
-            element.whenDragStarts(function (e) {
-                var event = new Event("juicy-draggable-start");
-                event.detail = e;
-                that.dispatchEvent(event);
-                return !(event.cancel === true);
-            });
-            element.whenDragging(function (e) {
-                var event = new Event("juicy-draggable-move");
-                event.detail = e;
-                that.dispatchEvent(event);
-            });
-            element.whenDragStops(function (e) {
-                var event = new Event("juicy-draggable-stop");
-                event.detail = e;
-                that.dispatchEvent(event);
-            });
-            element.whenDragHighlight(function (e) {
-                var event = new Event("juicy-draggable-highligh");
-                event.detail = e;
-                that.dispatchEvent(event);
-            });
-        };
-        JuicyDraggablePrototype.attributeChangedCallback = function (attributeName) {
-            switch (attributeName) {
-            case "disabled":
-                var value = this.hasAttribute("disabled");
-                if (value) {
-                    this.element.setAttribute("data-draggable-disabled", "disabled");
+
+            connectedCallback() {
+                var element = null;
+                var handle = null;
+                var that = this;
+                var root;
+                if (this.attachShadow) {
+                    root = this.attachShadow({ mode: 'open' });
+                    root.innerHTML = '<slot id="content"></slot>';
                 } else {
-                    this.element.removeAttribute("data-draggable-disabled");
+                    root = this.createShadowRoot();
+                    root.innerHTML = '<content id="content"></content>';
                 }
-                break;
+                this.refreshAttributeValues();
+                if (!this.elementId) {
+                    element = this.children[0];
+                } else {
+                    element = this.querySelector("#" + this.elementId);
+                }
+                if (this.handleId) {
+                    handle = this.querySelector("#" + this.handleId);
+                }
+                this.dragHelperClass = this.dragHelperClass || "drag-helper";
+                this.dragHoverClass = this.dragHoverClass || "drag-hover";
+                this.draggingClass = this.draggingClass || "dragging";
+                this.element = element;
+                element = draggable({
+                    element: element,
+                    handle: handle,
+                    position: this.position,
+                    dropSelector: this.dropSelector,
+                    dragHelperClass: this.dragHelperClass,
+                    dragHoverClass: this.dragHoverClass,
+                    draggingClass: this.draggingClass
+                });
+                element.whenDragStarts(function (e) {
+                    var event = new Event("juicy-draggable-start");
+                    event.detail = e;
+                    that.dispatchEvent(event);
+                    return !(event.cancel === true);
+                });
+                element.whenDragging(function (e) {
+                    var event = new Event("juicy-draggable-move");
+                    event.detail = e;
+                    that.dispatchEvent(event);
+                });
+                element.whenDragStops(function (e) {
+                    var event = new Event("juicy-draggable-stop");
+                    event.detail = e;
+                    that.dispatchEvent(event);
+                });
+                element.whenDragHighlight(function (e) {
+                    var event = new Event("juicy-draggable-highligh");
+                    event.detail = e;
+                    that.dispatchEvent(event);
+                });
             }
-        };
-        JuicyDraggablePrototype.getScreenSize = function () {
-            var w = window;
-            var d = document;
-            var e = d.documentElement;
-            var g = d.getElementsByTagName('body')[0];
-            var x = w.innerWidth || e.clientWidth || g.clientWidth;
-            var y = w.innerHeight || e.clientHeight || g.clientHeight;
-            return { x: x, y: y };
-        };
-        JuicyDraggablePrototype.refreshAttributeValues = function () {
-            var attributes = ["elementId", "handleId", "position", "dropSelector", "dragHelperClass", "dragHoverClass", "draggingClass", "disabled"];
-            for (var i = 0; i < attributes.length; i++) {
-                var a = attributes[i];
-                if (this.hasAttribute(a)) {
-                    this[a] = this.attributes[a].nodeValue;
-                    this.attributeChangedCallback(a);
+
+            getScreenSize() {
+                var w = window;
+                var d = document;
+                var e = d.documentElement;
+                var g = d.getElementsByTagName('body')[0];
+                var x = w.innerWidth || e.clientWidth || g.clientWidth;
+                var y = w.innerHeight || e.clientHeight || g.clientHeight;
+                return { x: x, y: y };
+            }
+            refreshAttributeValues() {
+                var attributes = ["elementId", "handleId", "position", "dropSelector", "dragHelperClass", "dragHoverClass", "draggingClass", "disabled"];
+                for (var i = 0; i < attributes.length; i++) {
+                    var a = attributes[i];
+                    if (this.hasAttribute(a)) {
+                        this[a] = this.attributes[a].nodeValue;
+                        this.attributeChangedCallback(a);
+                    }
                 }
             }
-        };
-        window.JuicyDraggableElement = document.registerElement("juicy-draggable", {
-            prototype: JuicyDraggablePrototype
-        });
+
+        }
+        //Throws a weird exception in IE;
+        //JuicyDraggable.disabled = false;
+
+        customElements.define("juicy-draggable", JuicyDraggable);
     })();
 </script>

@@ -1,9 +1,10 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <title>juicy-draggable</title>
     <meta charset="utf-8" />
-    <script src="../webcomponentsjs/webcomponents.js"></script>
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="../polymer/polymer.html" />
     <link rel="import" href="juicy-draggable.html" />
     <style>
@@ -66,26 +67,29 @@
         }
     </style>
 </head>
+
 <body>
     <h3>juicy-draggable</h3>
     <p>This demo requires Polymer</p>
-    <template is="dom-bind" id="root">
-        <div id="drag">
-            <juicy-draggable position="static" dropselector="#drop div.drop" on-juicy-draggable-stop="itemDropped">
-                <div class="drag">Drag and drop my copy</div>
-            </juicy-draggable>
-            <juicy-draggable class="fixed-drop" dropselector="#drop div.drop" on-juicy-draggable-stop="itemDropped">
-                <div class="drag">Drag and drop me</div>
-            </juicy-draggable>
-            <juicy-draggable class="fixed">
-                <div class="drag">Drag me around</div>
-            </juicy-draggable>
-        </div>
-        <div id="drop">
-            <p>Drop zone</p>
-            <div class="drop"></div>
-        </div>
-    </template>
+    <dom-bind id="root">
+        <template>
+            <div id="drag">
+                <juicy-draggable position="static" dropselector="#drop div.drop" on-juicy-draggable-stop="itemDropped">
+                    <div class="drag">Drag and drop my copy</div>
+                </juicy-draggable>
+                <juicy-draggable class="fixed-drop" dropselector="#drop div.drop" on-juicy-draggable-stop="itemDropped">
+                    <div class="drag">Drag and drop me</div>
+                </juicy-draggable>
+                <juicy-draggable class="fixed">
+                    <div class="drag">Drag me around</div>
+                </juicy-draggable>
+            </div>
+            <div id="drop">
+                <p>Drop zone</p>
+                <div class="drop"></div>
+            </div>
+        </template>
+    </dom-bind>
     <script>
         var template = document.querySelector("#root");
 
@@ -111,4 +115,5 @@
         };
     </script>
 </body>
+
 </html>

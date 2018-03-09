@@ -8,6 +8,9 @@
   "description": "Custom element to make items draggable and droppable",
   "main": "juicy-draggable.html",
   "moduleType": [],
+  "dependencies": {
+    "polymer":"polymer#^2.0.0"
+  },
   "keywords": [
     "WebComponent",
     "draggable",
